@@ -1,6 +1,8 @@
 # whisper-obs-pipeline
 
-Batch-transcribe screen recordings with [whisper.cpp](https://github.com/ggml-org/whisper.cpp), with an optional **speaker-split mode** for OBS recordings that have separate microphone and desktop-audio (for example, screen reader) tracks. The result is one transcript with a label before every line:
+I record software demos in which two voices are speaking at once: mine, and a screen reader (NVDA) announcing what is on screen. Both need to be in the transcripts and captions, and each needs to be labeled, so a reader can tell what I said from what the screen reader announced. A normal transcription tool produces one unlabeled stream of text, so I set this up to record the two voices on separate tracks in OBS, transcribe each one on its own, and merge them by time into a single labeled transcript and caption file.
+
+Concretely, it batch-transcribes screen recordings with [whisper.cpp](https://github.com/ggml-org/whisper.cpp), with an optional **speaker-split mode** for OBS recordings that have separate microphone and desktop-audio (for example, screen reader) tracks. The result is one transcript, plus matching SRT captions, with a label before every line:
 
 ```
 [MRH] Okay, I'm starting on the worksheet now.

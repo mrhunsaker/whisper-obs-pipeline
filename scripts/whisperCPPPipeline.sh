@@ -169,8 +169,9 @@ fi
 if [[ -z $model_name ]]; then
     [[ -t 0 ]] || die "--model is required when not running interactively"
     mapfile -t available < <(
-        cd "$whisper_home/models" 2>/dev/null &&
-        compgen -G 'ggml-*.bin' | grep -Ev 'for-tests|silero' | sort || true
+        if cd "$whisper_home/models" 2>/dev/null; then
+            compgen -G 'ggml-*.bin' | grep -Ev 'for-tests|silero' | sort || true
+        fi
     )
     [[ ${#available[@]} -gt 0 ]] ||
         die "No models in $whisper_home/models. Run: ./models/download-ggml-model.sh large-v3-turbo"
