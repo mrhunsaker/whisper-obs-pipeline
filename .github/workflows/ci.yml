@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ffmpeg and ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg shellcheck
+
+      - name: Syntax check
+        run: |
+          for f in scripts/whisperCPPPipeline.sh tests/smoke-test.sh; do
+            bash -n "$f"
+          done
+
+      - name: ShellCheck
+        run: shellcheck scripts/whisperCPPPipeline.sh tests/smoke-test.sh
+
+      - name: Smoke test
+        run: bash tests/smoke-test.sh

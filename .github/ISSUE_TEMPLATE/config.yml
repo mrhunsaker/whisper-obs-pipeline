@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/<your-username>/whisper-obs-pipeline/security/advisories/new
+    about: Please report security issues privately instead of opening a public issue.
+  - name: whisper.cpp issues
+    url: https://github.com/ggml-org/whisper.cpp/issues
+    about: Problems building or running whisper.cpp itself belong upstream.

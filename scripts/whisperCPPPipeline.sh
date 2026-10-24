@@ -26,6 +26,7 @@ vad_model=""
 no_gpu=false
 force=false
 split_speakers=false
+convert_failed=false
 to_mp4=""
 mic_track=0
 nvda_track=1
@@ -478,9 +479,10 @@ if [[ $convert_audio == true ]]; then
     conv_fn=convert_one
     if [[ $split_speakers == true ]]; then conv_fn=convert_split_one; fi
 
+    # shellcheck disable=SC2016  # $1/$@ are meant to expand in the child shell
     list_media |
         xargs -0 -r -n1 -P "$jobs" bash -c 'fn=$1; shift; "$fn" "$@"' _ "$conv_fn" ||
-        warn "some conversions failed"
+        { warn "some conversions failed"; convert_failed=true; }
     echo
 fi
 
@@ -491,9 +493,10 @@ fi
 if [[ $to_mp4 == true ]]; then
     command -v ffmpeg >/dev/null || die "ffmpeg not found"
     echo "Remuxing MKV to MP4 ($jobs parallel)..."
+    # shellcheck disable=SC2016  # $1 is meant to expand in the child shell
     find "$folder_home" -maxdepth 1 -type f -iname '*.mkv' -print0 |
         xargs -0 -r -n1 -P "$jobs" bash -c 'remux_one "$1"' _ ||
-        warn "some MP4 remuxes failed"
+        { warn "some MP4 remuxes failed"; convert_failed=true; }
     echo
 fi
 
@@ -622,7 +625,12 @@ echo
 printf 'Done in %dm%02ds: %d transcribed, %d skipped, %d failed\n' \
     $((t / 60)) $((t % 60)) "$done_count" "$skipped" "${#failed[@]}"
 
-if [[ ${#failed[@]} -gt 0 ]]; then
-    printf '  failed: %s\n' "${failed[@]}" >&2
+if [[ ${#failed[@]} -gt 0 || $convert_failed == true ]]; then
+    if [[ ${#failed[@]} -gt 0 ]]; then
+        printf '  failed: %s\n' "${failed[@]}" >&2
+    fi
+    if [[ $convert_failed == true ]]; then
+        echo "  some conversions or MP4 remuxes failed (see messages above)" >&2
+    fi
     exit 1
 fi
