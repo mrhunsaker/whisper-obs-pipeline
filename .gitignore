@@ -1,0 +1,16 @@
+# Media and generated transcripts (keep recordings out of the repo)
+recordings/
+*.wav
+*.mkv
+*.mp4
+*.part
+*.split-tracks
+*.mic.json
+*.nvda.json
+*.merged.txt
+*.merged.srt
+
+# A local whisper.cpp checkout, its build output and models
+whisper.cpp/
+build/
+models/

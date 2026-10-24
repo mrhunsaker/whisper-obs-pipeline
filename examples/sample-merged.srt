@@ -1,0 +1,16 @@
+1
+00:00:01,200 --> 00:00:03,900
+[MRH] Okay, I'm starting on the worksheet now.
+
+2
+00:00:04,500 --> 00:00:06,800
+[NVDA] Heading level one, Beginning Worksheet.
+
+3
+00:00:07,000 --> 00:00:08,600
+[NVDA] Link, Question one.
+
+4
+00:00:10,100 --> 00:00:11,900
+[MRH] Let me open the first question.
+
